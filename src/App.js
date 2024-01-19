@@ -1,6 +1,8 @@
 import { Container, Nav, Navbar, NavDropdown, Form, Button } from 'react-bootstrap';
 import './App.css';
 import { useState } from 'react';
+import { Routes, Route, Link } from 'react-router-dom'
+
 // App.js에서 이미지를 바로 가져오고 싶을때
 // import 작명 from 경로
 // import bg from './img/bg.png'
@@ -14,6 +16,9 @@ import { useState } from 'react';
 // import {a,b} from './data.js';
 import data from './data.js';
 
+//컴포넌트 가져오기
+import Detail from './detail.js'
+
 // 이를 한방에 해결할 수 있다.
 // public폴더 안에 있는 이미지는 /{이미지경로} 로 쓸 수 있다.
 // 서브 경로에다가 발행하고 싶을대 문제가 생길 수 있다.
@@ -25,9 +30,10 @@ function App() {
 
   return (
     <div className="App">
+
       <Navbar expand="lg" className="bg-body-tertiary" bg="light" data-bs-theme="light" >
         <Container>
-          <Navbar.Brand href="#home">Sandbox4DevP</Navbar.Brand>
+          <Navbar.Brand href="/">Sandbox4DevP</Navbar.Brand>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
@@ -65,17 +71,44 @@ function App() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+
+      {/* 페이지 이동은 Link */}
+      <Link to="/">홈</Link>
+      <Link to="/detail">상세페이지</Link>
+
+      {/* Route사용하기 */}
+      <Routes>
+        <Route path="/" element={
+          <>
+            <div className='main-bg'></div>
+            <div className="container">
+              <div className="row">
+                {
+                  shoes.map(function (item, index) {
+                    return (
+                      <Compo key={item.id} shoe={item}></Compo>
+                    )
+                  })
+                }
+              </div>
+            </div>
+          </>
+        } />
+        <Route path="/detail" element={<Detail/>}/>
+      </Routes>
+
+
+
       {/* 변수 중간에 값을 넣고 싶을때 +를 쓰면된다. */}
       {/* <div className='main-bg' style={{backgroundImage: 'url('+ bg +')'}}></div> */}
-      <div className='main-bg'></div>
+      {/* <div className='main-bg'></div>
       <div className="container">
         <div className="row">
           {
             shoes.map(function (item, index) {
               return (
-                // <Compo key={item.id} id={item.id} title={item.title} content={item.content}></Compo>
                 <Compo key={item.id} shoe={item}></Compo>
-                )
+              )
             })
           }
           {/* <div className="col-md-4">
@@ -93,8 +126,8 @@ function App() {
             <h4>상품명</h4>
             <p>상품설명</p>
           </div> */}
-        </div>
-      </div>
+      {/* </div>
+      </div> */}
 
     </div>
   );

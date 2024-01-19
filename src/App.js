@@ -1,7 +1,7 @@
 import { Container, Nav, Navbar, NavDropdown, Form, Button } from 'react-bootstrap';
 import './App.css';
 import { useState } from 'react';
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 
 // App.js에서 이미지를 바로 가져오고 싶을때
 // import 작명 from 경로
@@ -14,10 +14,10 @@ import { Routes, Route, Link } from 'react-router-dom'
 // import a from './data.js';
 //데이터가 여러개가 export되었을때
 // import {a,b} from './data.js';
-import data from './data.js';
+import data from './components/data.js';
 
 //컴포넌트 가져오기
-import Detail from './Detail.js'
+import Detail from './pages/Detail.js'
 
 // 이를 한방에 해결할 수 있다.
 // public폴더 안에 있는 이미지는 /{이미지경로} 로 쓸 수 있다.
@@ -27,6 +27,10 @@ import Detail from './Detail.js'
 function App() {
   // API를 통해 데이터를 받아왔다고 가정하자 여기에서는 data.js가 전송된 데이터
   let [shoes] = useState(data)
+
+  // 페이지 이동을 도와주는 훅
+  // 함수가 들어가있어 별도의 변수에 저장해서 쓰는게 일반적
+  let navigate = useNavigate();
 
   return (
     <div className="App">
@@ -39,8 +43,8 @@ function App() {
           <Navbar.Collapse id="basic-navbar-nav">
 
             <Nav className="me-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
-              <Nav.Link href="#link">Cart</Nav.Link>
+              <Nav.Link onClick={() => { navigate('/') }}>Home</Nav.Link>
+              <Nav.Link onClick={() => { navigate('/detail') }}>Detail</Nav.Link>
               <NavDropdown title="Profile" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">
@@ -72,7 +76,7 @@ function App() {
         </Container>
       </Navbar>
 
-      {/* 페이지 이동은 Link */}
+      {/* 페이지 이동은 Link | 근대 안이쁘다 */}
       <Link to="/">홈</Link>
       <Link to="/detail">상세페이지</Link>
 
@@ -94,7 +98,22 @@ function App() {
             </div>
           </>
         } />
-        <Route path="/detail" element={<Detail/>}/>
+        <Route path="/detail" element={<Detail />} />
+
+        {/* 더 깊게가려면 nested route를 사용 */}
+        <Route path="/about" element={<About />}>
+          <Route path="member" element={<div>맴버임</div>} />
+          <Route path="location" element={<About />} />
+        </Route>
+
+        {/* 직접 해보기 */}
+        <Route path="event" element={<Event/>}>
+          <Route path='one' element={<div>첫 주문시 양배추즙 서비스</div>}></Route>
+          <Route path='two' element={<div>생일기념 쿠폰받기</div>}></Route>
+        </Route>
+
+        {/* 404페이지 만들기 */}
+        <Route path="*" element={<div>404페이지에요</div>} />
       </Routes>
 
 
@@ -138,6 +157,24 @@ function App() {
 // 계산은 () 괄호
 // component는 key값을 넘겨주어야 된다 나중을 위해
 // 오브젝트를 그대로 넘길 수 있다.
+
+function About() {
+  return (
+    <div>
+      <h4>회사정보임</h4>
+      <Outlet/>
+    </div>
+  )
+}
+
+function Event() {
+  return (
+    <div>
+      <h4>오늘의 이벤트</h4>
+      <Outlet></Outlet>
+    </div>
+  )
+}
 
 function Compo(props) {
   return (

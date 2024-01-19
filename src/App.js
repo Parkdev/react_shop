@@ -17,7 +17,7 @@ import { Routes, Route, Link } from 'react-router-dom'
 import data from './data.js';
 
 //컴포넌트 가져오기
-import Detail from './detail.js'
+import Detail from './Detail.js'
 
 // 이를 한방에 해결할 수 있다.
 // public폴더 안에 있는 이미지는 /{이미지경로} 로 쓸 수 있다.

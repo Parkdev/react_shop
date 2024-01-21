@@ -113,8 +113,6 @@ function App() {
             </div>
             <button className='mt-3 btn btn-success' onClick={
               () => {
-
-                //임시 지연
                 if (clickCount == 0 || clickCount == 1) {
                   //로딩바 부르기
                   setLoading(true);
@@ -139,10 +137,6 @@ function App() {
                 } else if (clickCount == 2) {
                   alert('데이터없음')
                 }
-
-
-
-
               }}>데이터 부르기</button>
           </>
         } />

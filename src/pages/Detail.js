@@ -7,9 +7,9 @@ import styled from 'styled-components'
 // 비슷한 컴포넌트 만들때 props를 넣을수도있다.
 // 다른 styled를 가져와 더하는 것도 가능하다. ex) styled.button(YellowBtn)
 let YellowBtn = styled.button`
-  background : ${ props => props.bg};
-  color :  ${ props => props.bg == 'blue' ? 'white' : 'black'};
-  padding : 10px;때
+  background : ${props => props.bg};
+  color :  ${props => props.bg == 'blue' ? 'white' : 'black'};
+  padding : 10px;
 `
 
 function Detail(props) {
@@ -20,11 +20,8 @@ function Detail(props) {
   // } 
   // })
 
-  useEffect(()=> {
-    //타이머 적용방법
-    setTimeout(()=>{ document.getElementById("Event").style.display = 'none' }, 2000)
-  })
   let [count, setCount] = useState(0)
+  let [alert, setAlert] = useState(true)
 
 
   // useParams(): 파라미터 정보를 가지고 있다.;
@@ -36,22 +33,41 @@ function Detail(props) {
   let 찾은상품 = props.shoes.find((x) => x.id == id)
   // 참고 arrow funtion은 return과 중괄호를 생략가능하다.
 
+  // useEffect(()=> {
+  //   //타이머 적용방법
+  //   setTimeout(()=>{ document.getElementById("Event").style.display = 'none' }, 2000) })
+  useEffect(() => {
+    setTimeout(() => { setAlert(false) }, 2000)
+  }, [])
+
+  // 예제: useEffect를 이용해서 숫자만 입력하는 알럿 띄우기
+  let [value, setValue] = useState('')
+  let [textAlert, setTextAlert] = useState(false)
+
+  useEffect(() => {
+    isNaN(value)? setTextAlert(true) : setTextAlert(false);
+  }, [value])
+
 
   return (
     <div className="container">
 
-        <div id="Event" className="alert alert-warning">
+      {
+        alert ? <div className="alert alert-warning">
           2초이내 구매시 할인
-        </div>
+        </div> : null
+      }
 
-        {/* useEffect 사용해보기 */}
-        {count}
-        <YellowBtn bg='blue' onClick={()=>{setCount(count+1)}}>버튼</YellowBtn>
-        <YellowBtn bg='orange'>버튼</YellowBtn>
+
+      {/* useEffect 사용해보기 */}
+      {count}
+      <YellowBtn bg='blue' onClick={() => { setCount(count + 1) }}>버튼</YellowBtn>
+      {/* <YellowBtn bg='orange'>버튼</YellowBtn> */}
 
       <div className="row">
         <div className="col-md-6">
           <img src={"/img/m" + (찾은상품.id + 1) + ".jpeg"} width="100%" />
+
         </div>
         <div className="col-md-6">
           <h4 className="pt-5">{찾은상품.title}</h4>
@@ -60,6 +76,18 @@ function Detail(props) {
           <button className="btn btn-danger">주문하기</button>
         </div>
       </div>
+
+      {/* useEffect 예제: 문자입력시 알럿 표시 */}
+      <div className="mb-3 align-item-start">
+        <div className="row row-cols-auto  mt-5">
+          <label for="exampleFormControlInput1" className="col form-label">숫자입력</label>
+          {
+          textAlert ? <p className="col text-danger">숫자만 입력해주세요</p> : null
+          }
+        </div>
+        <input type="text" className="col form-control red" placeholder="숫자 입력" onChange={ (e) => setValue(e.target.value)} />
+      </div>
+
     </div>
   )
 }

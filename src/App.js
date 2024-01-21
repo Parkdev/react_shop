@@ -77,8 +77,8 @@ function App() {
       </Navbar>
 
       {/* 페이지 이동은 Link | 근대 안이쁘다 */}
-      <Link to="/">홈</Link>
-      <Link to="/detail">상세페이지</Link>
+      {/* <Link to="/">홈</Link>
+      <Link to="/detail">상세페이지</Link> */}
 
       {/* Route사용하기 */}
       <Routes>

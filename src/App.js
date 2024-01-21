@@ -2,6 +2,8 @@ import { Container, Nav, Navbar, NavDropdown, Form, Button, Row } from 'react-bo
 import './App.css';
 import { useState } from 'react';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
+import axios from 'axios'
+import Loading from './Loading.js'
 
 // App.js에서 이미지를 바로 가져오고 싶을때
 // import 작명 from 경로
@@ -26,11 +28,17 @@ import Detail from './pages/Detail.js'
 
 function App() {
   // API를 통해 데이터를 받아왔다고 가정하자 여기에서는 data.js가 전송된 데이터
-  let [shoes] = useState(data)
+  let [shoes, setShoes] = useState(data)
 
   // 페이지 이동을 도와주는 훅
   // 함수가 들어가있어 별도의 변수에 저장해서 쓰는게 일반적
   let navigate = useNavigate();
+
+  //loading
+  let [loading, setLoading] = useState(false);
+
+  //click count
+  let [clickCount, setclickCount] = useState(0);
 
   return (
     <div className="App">
@@ -103,8 +111,42 @@ function App() {
                 }
               </div>
             </div>
+            <button className='mt-3 btn btn-success' onClick={
+              () => {
+
+                //임시 지연
+                if (clickCount == 0 || clickCount == 1) {
+                  //로딩바 부르기
+                  setLoading(true);
+                  setTimeout(() => {
+                    //데이터 부르기
+                    let link = 'https://codingapple1.github.io/shop/data'+(clickCount+2)+'.json' 
+                    axios.get(link)
+                      .then((result) => {
+                        let copy = [...shoes, ...result.data];
+                        setShoes(copy);
+                        //로딩바 숨기기
+                        setclickCount(clickCount + 1);
+                        setLoading(false);
+                      })
+                      .catch(() => {
+                        alert('로드실패')
+                        //로딩바 숨기기
+                        setclickCount(clickCount + 1);
+                        setLoading(false);
+                      });
+                  }, 2000);
+                } else if (clickCount == 2) {
+                  alert('데이터없음')
+                }
+
+
+
+
+              }}>데이터 부르기</button>
           </>
         } />
+
 
         {/* url parameter */}
         <Route path="/detail/:id" element={<Detail shoes={shoes} />} />
@@ -124,6 +166,9 @@ function App() {
         {/* 404페이지 만들기 */}
         <Route path="*" element={<div>404페이지에요</div>} />
       </Routes>
+
+      {/* 로딩페이지 */}
+      {loading ? <Loading /> : null}
 
 
 

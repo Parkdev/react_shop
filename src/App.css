@@ -7,14 +7,12 @@
   background-color: black;
 
 }
-
 /* Main Component */
 div > img {
   display: inline-block;
   width: 80%;
   background-size: cover;
   background-position: center;
-  background-color: black;
 }
 
 

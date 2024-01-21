@@ -1,9 +1,11 @@
+import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import styled from 'styled-components'
 
 //하나의 스타일 컴포넌트를 만드는것 styled-components
 // 버튼 만들기
 // 비슷한 컴포넌트 만들때 props를 넣을수도있다.
+// 다른 styled를 가져와 더하는 것도 가능하다. ex) styled.button(YellowBtn)
 let YellowBtn = styled.button`
   background : ${ props => props.bg};
   color :  ${ props => props.bg == 'blue' ? 'white' : 'black'};
@@ -11,6 +13,19 @@ let YellowBtn = styled.button`
 `
 
 function Detail(props) {
+  // useEffect는 기본적으로 mount, update시 코드를 실행시켜준다.
+  // useEffect(()=>{
+  //   for (var i = 0; i < 10000; i++){
+  //     console.log(1)
+  // } 
+  // })
+
+  useEffect(()=> {
+    //타이머 적용방법
+    setTimeout(()=>{ document.getElementById("Event").style.display = 'none' }, 2000)
+  })
+  let [count, setCount] = useState(0)
+
 
   // useParams(): 파라미터 정보를 가지고 있다.;
   let { id } = useParams();
@@ -25,7 +40,13 @@ function Detail(props) {
   return (
     <div className="container">
 
-        <YellowBtn bg='blue'>버튼</YellowBtn>
+        <div id="Event" className="alert alert-warning">
+          2초이내 구매시 할인
+        </div>
+
+        {/* useEffect 사용해보기 */}
+        {count}
+        <YellowBtn bg='blue' onClick={()=>{setCount(count+1)}}>버튼</YellowBtn>
         <YellowBtn bg='orange'>버튼</YellowBtn>
 
       <div className="row">

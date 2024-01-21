@@ -1,4 +1,4 @@
-import { Container, Nav, Navbar, NavDropdown, Form, Button } from 'react-bootstrap';
+import { Container, Nav, Navbar, NavDropdown, Form, Button, Row } from 'react-bootstrap';
 import './App.css';
 import { useState } from 'react';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
@@ -85,8 +85,15 @@ function App() {
         <Route path="/" element={
           <>
             <div className='main-bg'></div>
+
+            <Container className='mt-4'>
+              <Row xs="auto" className='justify-content-end'>
+                <Button variant="outline-secondary">정렬하기</Button>
+              </Row>
+            </Container>
+
             <div className="container">
-              <div className="row">
+              <div className="row mt-4">
                 {
                   shoes.map(function (item, index) {
                     return (
@@ -98,7 +105,9 @@ function App() {
             </div>
           </>
         } />
-        <Route path="/detail" element={<Detail />} />
+
+        {/* url parameter */}
+        <Route path="/detail/:id" element={<Detail shoes={shoes} />} />
 
         {/* 더 깊게가려면 nested route를 사용 */}
         <Route path="/about" element={<About />}>
@@ -107,7 +116,7 @@ function App() {
         </Route>
 
         {/* 직접 해보기 */}
-        <Route path="event" element={<Event/>}>
+        <Route path="event" element={<Event />}>
           <Route path='one' element={<div>첫 주문시 양배추즙 서비스</div>}></Route>
           <Route path='two' element={<div>생일기념 쿠폰받기</div>}></Route>
         </Route>
@@ -162,7 +171,7 @@ function About() {
   return (
     <div>
       <h4>회사정보임</h4>
-      <Outlet/>
+      <Outlet />
     </div>
   )
 }

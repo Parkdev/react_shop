@@ -1,3 +1,13 @@
+/* 전환 애니메이션 */
+.start {
+  opacity: 0;
+}
+
+.end {
+  opacity: 1;
+  transition: opacity 2s;
+}
+
 /* 메인 백그라운드 */
 .main-bg {
   height: 300px;

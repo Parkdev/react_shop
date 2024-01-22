@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import styled from 'styled-components'
+import { Nav } from 'react-bootstrap';
 
 //하나의 스타일 컴포넌트를 만드는것 styled-components
 // 버튼 만들기
@@ -20,8 +21,9 @@ function Detail(props) {
   // } 
   // })
 
-  let [count, setCount] = useState(0)
-  let [alert, setAlert] = useState(true)
+  let [count, setCount] = useState(0);
+  let [alert, setAlert] = useState(true);
+  let [tab, setTab] = useState(0);
 
 
   // useParams(): 파라미터 정보를 가지고 있다.;
@@ -45,12 +47,23 @@ function Detail(props) {
   let [textAlert, setTextAlert] = useState(false)
 
   useEffect(() => {
-    isNaN(value)? setTextAlert(true) : setTextAlert(false);
+    isNaN(value) ? setTextAlert(true) : setTextAlert(false);
   }, [value])
 
+  //예제: Detail페이지에 투명도 0-> 1 애니메이션을 줘보자
+  let [fade2,setFade2] = useState('')
+
+  useEffect(()=> {
+    setFade2('end')
+
+    return (()=>{
+      // clearTimeout(a);
+      setFade2('');
+    })
+  }, [])
 
   return (
-    <div className="container">
+    <div className={`container start ${fade2}`}>
 
       {
         alert ? <div className="alert alert-warning">
@@ -82,12 +95,58 @@ function Detail(props) {
         <div className="row row-cols-auto  mt-5">
           <label for="exampleFormControlInput1" className="col form-label">숫자입력</label>
           {
-          textAlert ? <p className="col text-danger">숫자만 입력해주세요</p> : null
+            textAlert ? <p className="col text-danger">숫자만 입력해주세요</p> : null
           }
         </div>
-        <input type="text" className="col form-control red" placeholder="숫자 입력" onChange={ (e) => setValue(e.target.value)} />
+        <input type="text" className="col form-control red" placeholder="숫자 입력" onChange={(e) => setValue(e.target.value)} />
       </div>
 
+      {/*  탭만들기 */}
+
+      {/* 스텝 1 ui만들기 */}
+      <Nav variant="tabs" defaultActiveKey="tab1">
+        <Nav.Item>
+          <Nav.Link onClick={()=>setTab(0)} eventKey="tab1">탭 1</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link onClick={()=>setTab(1)} eventKey="tab2">탭 2</Nav.Link>
+        </Nav.Item>
+        <Nav.Item>
+          <Nav.Link onClick={()=>setTab(2)} eventKey="tab3">탭 3</Nav.Link>
+        </Nav.Item>
+      </Nav>
+      <TabContent tab={tab} />
+
+    </div>
+  )};
+
+function TabContent({tab}) {
+  // if (props.tab == 0) {
+  //   return (<div>내용1</div>)
+  // }
+  // if (props.tab == 1) {
+  //   return (<div>내용2</div>)
+  // }
+  // if (props.tab == 2) {
+  //   return (<div>내용3</div>)
+  // }
+
+  // 전환 애니메이션 만들기
+  let [fade,setFade] = useState('')
+
+  useEffect(() => {
+    let a = setTimeout(()=>{ setFade('end') }, 10)
+
+    return (()=>{
+      clearTimeout(a)
+      setFade('')
+    })
+  }, [tab])
+
+  //위를 더 보기 편하게 작성하려면
+  return (
+    <div className={'start ' + fade }>
+      { [ <div>내용0</div>, <div>내용1</div>, <div>내용2</div> ][tab] }
     </div>
   )
 }

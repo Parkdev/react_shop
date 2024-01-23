@@ -1,10 +1,9 @@
 import { Container, Nav, Navbar, NavDropdown, Form, Button, Row } from 'react-bootstrap';
 import './App.css';
-import { useState } from 'react';
+import { useState, createContext } from 'react';
 import { Routes, Route, Link, useNavigate, Outlet } from 'react-router-dom'
 import axios from 'axios'
-import Loading from './Loading.js'
-
+import Loading from './pages/Loading.js'
 // App.js에서 이미지를 바로 가져오고 싶을때
 // import 작명 from 경로
 // import bg from './img/bg.png'
@@ -21,14 +20,25 @@ import data from './components/data.js';
 //컴포넌트 가져오기
 import Detail from './pages/Detail.js'
 
+//Redux용 cart페이지
+import Cart from './pages/Cart.js'
+
 // 이를 한방에 해결할 수 있다.
 // public폴더 안에 있는 이미지는 /{이미지경로} 로 쓸 수 있다.
 // 서브 경로에다가 발행하고 싶을대 문제가 생길 수 있다.
 // 이때는 {process.env.PUBLIC+URL + '{이미지경로}'} 로 작성하면된다.
 
+// Context api
+export let Context1 = createContext()
+
 function App() {
   // API를 통해 데이터를 받아왔다고 가정하자 여기에서는 data.js가 전송된 데이터
   let [shoes, setShoes] = useState(data)
+
+  //Context api 예제
+  // 상품의 재고를 관리하는 state
+  let [stock] = useState([10, 11, 12])
+
 
   // 페이지 이동을 도와주는 훅
   // 함수가 들어가있어 별도의 변수에 저장해서 쓰는게 일반적
@@ -118,7 +128,7 @@ function App() {
                   setLoading(true);
                   setTimeout(() => {
                     //데이터 부르기
-                    let link = 'https://codingapple1.github.io/shop/data'+(clickCount+2)+'.json' 
+                    let link = 'https://codingapple1.github.io/shop/data' + (clickCount + 2) + '.json'
                     axios.get(link)
                       .then((result) => {
                         let copy = [...shoes, ...result.data];
@@ -141,9 +151,13 @@ function App() {
           </>
         } />
 
-
+        {/* Context 사용해보자 */}
         {/* url parameter */}
-        <Route path="/detail/:id" element={<Detail shoes={shoes} />} />
+        <Route path="/detail/:id" element={
+          <Context1.Provider value= {{ stock, shoes }}>
+            <Detail shoes={shoes} />
+          </Context1.Provider>
+        } />
 
         {/* 더 깊게가려면 nested route를 사용 */}
         <Route path="/about" element={<About />}>
@@ -159,6 +173,9 @@ function App() {
 
         {/* 404페이지 만들기 */}
         <Route path="*" element={<div>404페이지에요</div>} />
+
+        {/* Redux를 사용해서 새 페이지 만들기 */}
+        <Route path="/cart" element={<Cart/>} />
       </Routes>
 
       {/* 로딩페이지 */}

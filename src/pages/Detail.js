@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import styled from 'styled-components'
 import { Nav } from 'react-bootstrap';
+
+//부모 component에서 가져온 stock를 써보자 (Context API)
+import {Context1} from './../App.js'
 
 //하나의 스타일 컴포넌트를 만드는것 styled-components
 // 버튼 만들기
@@ -62,6 +65,9 @@ function Detail(props) {
     })
   }, [])
 
+  // context API를 통해 받아온 context를 분해
+  let {stock, shoes} = useContext(Context1)
+  
   return (
     <div className={`container start ${fade2}`}>
 
@@ -115,12 +121,12 @@ function Detail(props) {
           <Nav.Link onClick={()=>setTab(2)} eventKey="tab3">탭 3</Nav.Link>
         </Nav.Item>
       </Nav>
-      <TabContent tab={tab} />
+      <TabContent tab={tab} shoes={props.shoes}/>
 
     </div>
   )};
 
-function TabContent({tab}) {
+function TabContent({tab, shoes}) {
   // if (props.tab == 0) {
   //   return (<div>내용1</div>)
   // }
@@ -146,7 +152,7 @@ function TabContent({tab}) {
   //위를 더 보기 편하게 작성하려면
   return (
     <div className={'start ' + fade }>
-      { [ <div>내용0</div>, <div>내용1</div>, <div>내용2</div> ][tab] }
+      { [ <div>{shoes[0].title}</div>, <div>내용1</div>, <div>내용2</div> ][tab] }
     </div>
   )
 }

@@ -40,12 +40,12 @@ let items = createSlice({
         },
         // 0124 예제. 중복 아이템 추가 방지 기능을 추가해보자
         addItem (state, action) {
-            if (state.find((a)=>a.name == action.payload.title)) {
-                window.alert('아이템이 중복되었습니다.')
+            let found = state.find((a)=>a.name == action.payload.title)
+            if (found) {
+                found.count++
             } else {
                 let item = { id: action.payload.id, name: action.payload.title, count: 1};
                 state.push(item);
-                window.alert('아이템 추가 성공')
             }   
         },
         deleteItem (state, action) {

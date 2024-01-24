@@ -1,10 +1,14 @@
 import { useContext, useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import styled from 'styled-components'
 import { Nav } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux'
 
 //부모 component에서 가져온 stock를 써보자 (Context API)
 import {Context1} from './../App.js'
+
+// addItem 사용하기
+import { addItem } from "../store.js";
 
 //하나의 스타일 컴포넌트를 만드는것 styled-components
 // 버튼 만들기
@@ -67,7 +71,14 @@ function Detail(props) {
 
   // context API를 통해 받아온 context를 분해
   let {stock, shoes} = useContext(Context1)
-  
+
+  // addItem 사용하기 예제
+  let itemsState = useSelector((state) => state.items)
+  let dispatch = useDispatch()
+
+  // navigate 사용
+  let navigate = useNavigate()
+
   return (
     <div className={`container start ${fade2}`}>
 
@@ -92,7 +103,8 @@ function Detail(props) {
           <h4 className="pt-5">{찾은상품.title}</h4>
           <p>{찾은상품.content}</p>
           <p>{찾은상품.price}</p>
-          <button className="btn btn-danger">주문하기</button>
+          {/* addItem 추가하기 */}
+          <button className="btn btn-danger" onClick={()=>{dispatch(addItem(찾은상품)); window.alert('장바구니 추가'); navigate('/cart')}}>주문하기</button>
         </div>
       </div>
 

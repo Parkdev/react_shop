@@ -1,5 +1,8 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 
+//다른 파일에서 slice가져오기
+import user from './store/userSlice.js'
+
 // 튜토리얼
 
 // let stock = createSlice({ //useState()와 비슷한 역할을 한다
@@ -15,29 +18,9 @@ import { configureStore, createSlice } from "@reduxjs/toolkit";
 // })
 
 // 값 변경함수를 넣어보자
-let user = createSlice({
-    name: 'user', 
-    initialState : 'kim',
-    // 값 변경하기 위해 추가해야하는 reducers
-    reducers : {
-        changeName(state) {
-            return 'john ' + state
-        },
-        hamsu2() {}
-    }
-})
-export let { changeName } = user.actions
+// 값이 너무 긴경우 별도의 파일로 관리할 수 있다.
+// ./store/userSlice.js로 이동 완료
 
-// 예제: Cart의 수량 그리고 수량 변경 함수를 넣어보자
-let cartCount = createSlice({
-    name: 'cartCount',
-    initialState: [0,0,0],
-    reducers : {
-        countup(state) {
-            return []
-        }
-    }
-})
 
 // 예제: Cart용 데이터를 꾸미고 보내보자
 
@@ -46,8 +29,21 @@ let items = createSlice({
     initialState: [
         {id : 0, name : 'White and Black', count : 2},
         {id : 2, name : 'Grey Yordan', count : 1}
-      ] 
+      ],
+    reducers: {
+        // 예제: Cart의 수량 그리고 수량 변경 함수를 넣어보자
+        increaseCount(state, action) {
+            state.find((x) => x.id == action.payload).count += 1;
+        },
+        addItem (state, action) {
+            let item = { id: action.payload.id, name: action.payload.title, count: 1}
+            state.push(item)
+        }
+    }
+     
 })
+
+export let { increaseCount, addItem } = items.actions;
 
 export default configureStore({
     reducer: {

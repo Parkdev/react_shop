@@ -154,7 +154,7 @@ function App() {
         {/* Context 사용해보자 */}
         {/* url parameter */}
         <Route path="/detail/:id" element={
-          <Context1.Provider value= {{ stock, shoes }}>
+          <Context1.Provider value={{ stock, shoes }}>
             <Detail shoes={shoes} />
           </Context1.Provider>
         } />
@@ -175,7 +175,7 @@ function App() {
         <Route path="*" element={<div>404페이지에요</div>} />
 
         {/* Redux를 사용해서 새 페이지 만들기 */}
-        <Route path="/cart" element={<Cart/>} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
 
       {/* 로딩페이지 */}
@@ -242,12 +242,14 @@ function Event() {
 }
 
 function Compo(props) {
+  let navigate = useNavigate();
+  let link = 'detail/' + props.shoe.id
   return (
-    <div className="col-md-4">
-      <img src={"/img/m" + (props.shoe.id + 1) + ".jpeg"} alt="" />
-      <h4>{props.shoe.title}</h4>
-      <p>{props.shoe.content}</p>
-    </div>
+      <div className="col-md-4" onClick={() => { navigate(link) }}>
+        <img src={"/img/m" + (props.shoe.id + 1) + ".jpeg"} alt="" />
+        <h4>{props.shoe.title}</h4>
+        <p>{props.shoe.content}</p>
+      </div>
   )
 }
 

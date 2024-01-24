@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import styled from 'styled-components'
 import { Nav } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch} from 'react-redux'
 
 //부모 component에서 가져온 stock를 써보자 (Context API)
 import {Context1} from './../App.js'
@@ -73,7 +73,7 @@ function Detail(props) {
   let {stock, shoes} = useContext(Context1)
 
   // addItem 사용하기 예제
-  let itemsState = useSelector((state) => state.items)
+  // let itemsState = useSelector((state) => state.items)
   let dispatch = useDispatch()
 
   // navigate 사용
@@ -104,7 +104,7 @@ function Detail(props) {
           <p>{찾은상품.content}</p>
           <p>{찾은상품.price}</p>
           {/* addItem 추가하기 */}
-          <button className="btn btn-danger" onClick={()=>{dispatch(addItem(찾은상품)); window.alert('장바구니 추가'); navigate('/cart')}}>주문하기</button>
+          <button className="btn btn-danger" onClick={()=>{dispatch(addItem(찾은상품)); navigate('/cart')}}>주문하기</button>
         </div>
       </div>
 

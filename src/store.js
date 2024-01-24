@@ -33,17 +33,30 @@ let items = createSlice({
     reducers: {
         // 예제: Cart의 수량 그리고 수량 변경 함수를 넣어보자
         increaseCount(state, action) {
-            state.find((x) => x.id == action.payload).count += 1;
+            // state.find((x) => x.id == action.payload).count++
+            // findIndex를 사용해보자
+            let index = state.findIndex((a) =>a.id == action.payload);
+            state[index].count++;
         },
+        // 0124 예제. 중복 아이템 추가 방지 기능을 추가해보자
         addItem (state, action) {
-            let item = { id: action.payload.id, name: action.payload.title, count: 1}
-            state.push(item)
-        }
+            if (state.find((a)=>a.name == action.payload.title)) {
+                window.alert('아이템이 중복되었습니다.')
+            } else {
+                let item = { id: action.payload.id, name: action.payload.title, count: 1};
+                state.push(item);
+                window.alert('아이템 추가 성공')
+            }   
+        },
+        deleteItem (state, action) {
+            let index = state.findIndex((a) => a.name == action.payload);
+            state.splice(index,1);
+        },
     }
      
 })
 
-export let { increaseCount, addItem } = items.actions;
+export let { increaseCount, addItem, deleteItem } = items.actions;
 
 export default configureStore({
     reducer: {

@@ -33,7 +33,7 @@ function Cart() {
                                     <td>{item.count}</td>
                                     <td>
                                         <button className='btn btn-success mr-3' onClick={()=>dispatch(increaseCount(item.id)) }>수량증가</button>
-                                        <button className='btn btn-warning' onClick={()=>dispatch(deleteItem(item.id)) }>아이템삭제</button>
+                                        <button className='btn btn-warning' onClick={()=>dispatch(deleteItem(item.name)) }>아이템삭제</button>
                                     </td>
                                 </tr>
                             )

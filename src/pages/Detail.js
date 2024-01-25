@@ -79,6 +79,16 @@ function Detail(props) {
   // navigate 사용
   let navigate = useNavigate()
 
+   // Local Storage좀더 깔끔한 방법
+   useEffect(()=> {
+    let arr = localStorage.getItem('watched');
+    arr = JSON.parse(arr)
+    arr.push(찾은상품.id)
+    arr = new Set(arr)
+    arr = Array.from(arr)
+    localStorage.setItem('watched', JSON.stringify(arr))
+  }, [])
+
   return (
     <div className={`container start ${fade2}`}>
 

@@ -51,12 +51,13 @@ function App() {
   let [clickCount, setclickCount] = useState(0);
 
   //local Storage 최근 본상품 만들어보기
+  // 좀더 깔끔하게 하려면 상품상세 페이지가 mount될때마다 실행되게하면된다. Detail.js 참고
   useEffect(() => {
     if (localStorage.getItem('watched') == null) {
       localStorage.setItem('watched', JSON.stringify([]))
     }
   }, [])
-  let [recent, setRecent] = useState(JSON.parse(localStorage.getItem('watched')));
+  // let [recent, setRecent] = useState(JSON.parse(localStorage.getItem('watched')));
 
   return (
     <div className="App">
@@ -116,27 +117,7 @@ function App() {
 
             <div className="container mt-4">
 
-              {recent.length != 0 ?
-                <>
-                  <Row xs="auto" className='mt-4'>
-                    <div className="w-full flex justify-between">
-                      <div className='flex items-center'>최근 본 목록</div>
-                      <button className="btn btn-warning" onClick={()=>setRecent([])}>목록 삭제</button>
-                    </div>
-
-                  </Row>
-                  <div className="row mt-4">
-                    {
-                      recent.map(function (item, index) {
-                        return (
-                          <Compo key={item} shoe={shoes[item]} recent={recent}></Compo>
-                        )
-                      })
-                    }
-                  </div>
-                </>
-                : null}
-
+              <RecentComponent shoes={shoes}/>
               <Row xs="auto" className='mt-4'>
                 <h1>영상 목록</h1>
               </Row>
@@ -144,7 +125,7 @@ function App() {
                 {
                   shoes.map(function (item, index) {
                     return (
-                      <Compo key={item.id} shoe={item} recent={setRecent}></Compo>
+                      <Compo key={item.id} shoe={item}></Compo>
                     )
                   })
                 }
@@ -213,8 +194,6 @@ function App() {
       {/* floating 최근 본 목록 */}
       {/* <FloatingNav /> */}
 
-
-
       {/* 변수 중간에 값을 넣고 싶을때 +를 쓰면된다. */}
       {/* <div className='main-bg' style={{backgroundImage: 'url('+ bg +')'}}></div> */}
       {/* <div className='main-bg'></div>
@@ -278,9 +257,9 @@ function Compo(props) {
   let link = 'detail/' + props.shoe.id
   return (
     <div className="col-md-4" onClick={() => {
-      let arr = new Set(JSON.parse(localStorage.getItem('watched'))).add(props.shoe.id);
-      console.log(arr);
-      localStorage.setItem('watched', JSON.stringify([...arr]));
+      // let arr = new Set(JSON.parse(localStorage.getItem('watched'))).add(props.shoe.id);
+      // // console.log(arr);
+      // localStorage.setItem('watched', JSON.stringify([...arr]));
       navigate(link);
     }}>
       <img src={"/img/m" + (props.shoe.id + 1) + ".jpeg"} alt="" />
@@ -290,20 +269,33 @@ function Compo(props) {
   )
 }
 
-//우측 중간에 Floating nav를 만들어보자
-function FloatingNav(props) {
+//중간에 Floating nav를 만들어보자
+function RecentComponent(props) {
+  let arr = JSON.parse(localStorage.getItem('watched'));
+  let [list,setList] = useState(arr);
   return (
-    <div className='fixed top-1/2 transform -translate-y-1/2 right-4 w-72 h-auto bg-green-400	'>
-      <div>최근 본 목록</div>
-      <Nav defaultActiveKey="/home" className="flex-column">
-        <Nav.Link href="/home">Active</Nav.Link>
-        <Nav.Link eventKey="link-1">Link</Nav.Link>
-        <Nav.Link eventKey="link-2">Link</Nav.Link>
-        <Nav.Link eventKey="disabled" disabled>
-          Disabled
-        </Nav.Link>
-      </Nav>
-    </div>
+    <>
+      {list.length != 0 ?
+        <>
+          <Row xs="auto" className='mt-4'>
+            <div className="w-full flex justify-between">
+              <div className='flex items-center'>최근 본 목록</div>
+              <button className="btn btn-warning" onClick={() => setList([])}>목록 삭제</button>
+            </div>
+
+          </Row>
+          <div className="row mt-4">
+            {
+              list.map(function (item, index) {
+                return (
+                  <Compo key={item} shoe={props.shoes[item]}></Compo>
+                )
+              })
+            }
+          </div>
+        </>
+        : null}
+    </>
   )
 }
 

@@ -22,6 +22,7 @@ import Detail from './pages/Detail.js'
 
 //Redux용 cart페이지
 import Cart from './pages/Cart.js'
+import { useQuery } from 'react-query';
 
 // 이를 한방에 해결할 수 있다.
 // public폴더 안에 있는 이미지는 /{이미지경로} 로 쓸 수 있다.
@@ -59,6 +60,18 @@ function App() {
   }, [])
   // let [recent, setRecent] = useState(JSON.parse(localStorage.getItem('watched')));
 
+  //[React-Query]
+  // 일반적으로 데이터를 가져올때,
+  // axios.get('https://codingapple1.github.io/userdata.json').then((a))->{
+  //   a.data
+  // }) 
+  // 와 같이 가져와야하지먼 react-query를 이용하면 이를 단축 시킬 수 있다.
+  let result = useQuery('작명', () => {
+    return axios.get('https://codingapple1.github.io/userdata.json').then((a) => {
+      return a.data
+    })
+  })
+
   return (
     <div className="App">
 
@@ -88,16 +101,20 @@ function App() {
               </NavDropdown>
 
             </Nav>
-
-            <Form className="d-flex">
-              <Form.Control
-                type="search"
-                placeholder="Search"
-                className="me-2"
-                aria-label="Search"
-              />
-              <Button variant="outline-success">Search</Button>
-            </Form>
+            <Nav className='flex items-center'>
+              <Form className="d-flex mr-3">
+                <Form.Control
+                  type="search"
+                  placeholder="Search"
+                  className="me-2"
+                  aria-label="Search"
+                />
+                <Button variant="outline-success">Search</Button>
+              </Form>
+              <Nav className='ms-auto'>
+                {result.isLoading ?'로딩중' : result.data.name}
+              </Nav>
+            </Nav>
 
           </Navbar.Collapse>
         </Container>
@@ -117,7 +134,7 @@ function App() {
 
             <div className="container mt-4">
 
-              <RecentComponent shoes={shoes}/>
+              <RecentComponent shoes={shoes} />
               <Row xs="auto" className='mt-4'>
                 <h1>영상 목록</h1>
               </Row>
@@ -272,7 +289,7 @@ function Compo(props) {
 //중간에 Floating nav를 만들어보자
 function RecentComponent(props) {
   let arr = JSON.parse(localStorage.getItem('watched'));
-  let [list,setList] = useState(arr);
+  let [list, setList] = useState(arr);
   return (
     <>
       {list.length != 0 ?

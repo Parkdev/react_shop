@@ -8,10 +8,9 @@ function Cart() {
     let userState = useSelector((state) => state.user)
     let itemsState = useSelector((state) => state.items)
     let dispatch = useDispatch()
-
+    
     return (
         <div>
-
             {userState.name}의 장바구니 {userState.age}
             <button className='btn btn-primary' onClick={()=>{dispatch(increaseAge(100))} }> age + 1 </button>
             <Table striped bordered hover>
